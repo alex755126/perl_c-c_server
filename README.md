@@ -2,10 +2,16 @@
 
 可以參考的網址：
 - IRC: 
-  - > RFC 2812 - Internet Relay Chat: Client Protocol
+  - > **RFC 2812 - Internet Relay Chat: Client Protocol**
     > https://tools.ietf.org/html/rfc2812
 
 - Perl:
+  - > **Perl programming documentation - perldoc.perl.org**
+    > http://perldoc.perl.org/index.html
+
+  - > Basic Introduction to Perl
+    > http://www.math.ncu.edu.tw/~chenym/perl/intro.html
+
   - > Perl的基本語法
     > http://ind.ntou.edu.tw/~dada/cgi/Perlsynx.htm
   
@@ -14,3 +20,9 @@
     
   - > Perl 正则表达式 | 菜鸟教程
     > http://www.runoob.com/perl/perl-regular-expressions.html
+
+- Raspberry
+  - rc.local
+    - > rc.local - Raspberry Pi Documentation
+      > https://www.raspberrypi.org/documentation/linux/usage/rc-local.md
+
